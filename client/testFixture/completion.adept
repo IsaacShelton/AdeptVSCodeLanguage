@@ -1,0 +1,24 @@
+
+import basics
+
+pragma ignore_unrecognized_directives
+pragma enable_experimental_colon_colon_syntax
+pragma enable_experimental_colon_before_type_syntax
+
+import basics
+
+main :: func {
+    names: <String> List = getNames()
+    integer: int = 10
+    
+    each name String in names {
+        print(name)
+    }
+}
+
+getNames :: func <String> List {
+    list: <String> List
+    list.add("Isaac")
+    list.add("Shelton")
+    return list.commit()
+}
