@@ -2,8 +2,8 @@
 	"name": "adept-language-insight-server",
 	"description": "Implementation of Adept Language Server",
 	"version": "1.0.0",
-	"author": "Microsoft Corporation",
-	"license": "MIT",
+	"author": "DockySoft",
+	"license": "GPL-3.0-only",
 	"engines": {
 		"node": "*"
 	},
