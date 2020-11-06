@@ -1,4 +1,6 @@
 out
+!insight_server.js
+!insight_server.wasm
 node_modules
 client/server
 .vscode-test
