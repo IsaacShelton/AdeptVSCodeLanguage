@@ -5,6 +5,8 @@ pragma ignore_unrecognized_directives
 pragma enable_experimental_colon_colon_syntax
 pragma enable_experimental_colon_before_type_syntax
 
+import 'glfw/glfw.adept'
+
 import basics
 
 main :: func {
@@ -16,9 +18,12 @@ main :: func {
     }
 }
 
-getNames :: func <String> List {
+// BUG: Somewhere here causes a memory leak
+geta <String> List {
     list: <String> List
     list.add("Isaac")
     list.add("Shelton")
     return list.commit()
 }
+
+import asfsfsasdfgawfeqwf4d
