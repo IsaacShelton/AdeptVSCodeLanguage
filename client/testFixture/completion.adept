@@ -1,13 +1,8 @@
 
-import basics
-
 pragma ignore_unrecognized_directives
 pragma enable_experimental_colon_colon_syntax
 pragma enable_experimental_colon_before_type_syntax
 
-import 'glfw/glfw.adept'
-
-import basics
 
 main :: func {
     names: <String> List = getNames()
@@ -18,12 +13,25 @@ main :: func {
     }
 }
 
-// BUG: Somewhere here causes a memory leak
-geta <String> List {
+func geta <String> List {
     list: <String> List
     list.add("Isaac")
     list.add("Shelton")
     return list.commit()
 }
 
-import asfsfsasdfgawfeqwf4d
+pragma ignore_unrecognized_directives
+pragma enable_experimental_colon_colon_syntax
+pragma enable_experimental_colon_before_type_syntax
+pragma ignore_unrecognized_directives
+pragma enable_experimental_colon_colon_syntax
+pragma enable_experimental_colon_before_type_syntax
+pragma ignore_unrecognized_directives
+pragma enable_experimental_colon_colon_syntax
+pragma enable_experimental_colon_before_type_syntax
+pragma ignore_unrecognized_directives
+pragma enable_experimental_colon_colon_syntax
+pragma enable_experimental_colon_before_type_syntax
+pragma entry gibrishgibrishgibrishgibrishgibrishgibrishgibrishgibrishgibrish
+
+asdf asdf asdf

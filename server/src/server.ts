@@ -216,9 +216,9 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 				severity: element.kind == "error" ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
 				range: {
 					start: textDocument.positionAt(element.source.index),
-					end: textDocument.positionAt(element.source.index + element.source.stride)
+					end: textDocument.positionAt(Math.floor(element.source.index + element.source.stride))
 				},
-				message: element.message,
+				message: element.message + Math.floor(element.source.index + element.source.stride),
 				source: undefined
 			};
 			
