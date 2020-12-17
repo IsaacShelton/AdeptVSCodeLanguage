@@ -14,15 +14,63 @@ import {
 	CompletionItemKind,
 	TextDocumentPositionParams,
 	TextDocumentSyncKind,
-	InitializeResult
+	InitializeResult,
+	HoverParams,
+	Hover,
+	MarkupContent
 } from 'vscode-languageserver';
 
 import {
+	Range,
 	TextDocument
 } from 'vscode-languageserver-textdocument';
 
+interface IdentifierToken {
+	range: Range,
+	content: string;
+}
+
 var insight_server = require('./insight_server.js');
 var is_wasm_initialized = false;
+var ast: any = null;
+var identifierTokens: IdentifierToken[] = [];
+
+class CompletionDetails {
+	detail: string;
+	documentation: string;
+
+	constructor(details: string, documentation: string){
+		this.detail = details;
+		this.documentation = documentation;
+	}
+}
+
+class AutoCompletions {
+	completionItems: CompletionItem[];
+	completionItemDetails: CompletionDetails[];
+
+	constructor(){
+		this.completionItems = [];
+		this.completionItemDetails = [];
+	}
+
+	// NOTE: 'item.data' is autofilled
+	add(item: CompletionItem, detail: CompletionDetails) {
+		item.data = this.completionItems.length;
+
+		this.completionItems.push(item);
+		this.completionItemDetails.push(detail);
+	}
+
+	getDetailedCompletionItem(item: CompletionItem) {
+		// 'item.data' is used as index for completion item
+		Object.assign(item, this.completionItemDetails[item.data]);
+		connection.console.log(JSON.stringify(item));
+		return item;
+	}
+}
+
+var autoCompletion: AutoCompletions = new AutoCompletions();
 
 insight_server.Module['onRuntimeInitialized'] = function() {
 	is_wasm_initialized = true;
@@ -84,9 +132,11 @@ connection.onInitialize((params: InitializeParams) => {
 			// Tell the client that this server supports code completion.
 			completionProvider: {
 				resolveProvider: true
-			}
+			},
+			hoverProvider: true
 		}
 	};
+
 	if (hasWorkspaceFolderCapability) {
 		result.capabilities.workspace = {
 			workspaceFolders: {
@@ -178,8 +228,8 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		return;
 	}
 	
-	var response: null | string | object = invokeInsight({
-		"query": "validate",
+	var response: null | string | any = invokeInsight({
+		"query": "ast",
 		"infrastructure": "/Users/isaac/Projects/Adept/bin/",
 		"filename": filename,
 		"code": textDocument.getText()
@@ -207,8 +257,8 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		};
 		
 		diagnostics.push(diagnostic);
-	} else if(Array.isArray(response)){
-		(response as any[]).forEach(element => {
+	} else if(Array.isArray(response.validation)){
+		(response.validation as any[]).forEach(element => {
 			var is_self = element.source.object === filename;
 			if(!is_self) return;
 			
@@ -226,6 +276,15 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		});
 	}
 
+	if(response.identifierTokens){
+		identifierTokens = response.identifierTokens;
+	}
+
+	if(response.ast){
+		ast = response.ast;
+		autoCompletion = constructAutoCompletions();
+	}
+
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
@@ -241,35 +300,57 @@ connection.onCompletion(
 		// The pass parameter contains the position of the text document in
 		// which code complete got requested. For the example we ignore this
 		// info and always provide the same completion items.
-		return [
-			{
-				label: 'TypeScript',
-				kind: CompletionItemKind.Text,
-				data: 1
-			},
-			{
-				label: 'JavaScript',
-				kind: CompletionItemKind.Text,
-				data: 2
-			}
-		];
+		return autoCompletion.completionItems;
 	}
 );
+
+function constructAutoCompletions(): AutoCompletions {
+	var completions: AutoCompletions = new AutoCompletions();
+	var symbols: any[] = [];
+
+	if(ast) {
+		ast.functions.forEach((f: any) => {
+			f._completionItemKind = CompletionItemKind.Function
+		});
+		symbols = symbols.concat(ast.functions);
+	}
+
+	symbols.forEach((symbol) => {
+		var item: CompletionItem = {label: symbol.name, kind: symbol._completionItemKind};
+		var details: CompletionDetails = new CompletionDetails(symbol.definition ? symbol.definition : "", symbol.documentation ? symbol.documentation : "");
+		
+		completions.add(item, details);
+	});
+
+	return completions;
+}
 
 // This handler resolves additional information for the item selected in
 // the completion list.
 connection.onCompletionResolve(
 	(item: CompletionItem): CompletionItem => {
-		if (item.data === 1) {
-			item.detail = 'TypeScript details';
-			item.documentation = 'TypeScript documentation';
-		} else if (item.data === 2) {
-			item.detail = 'JavaScript details';
-			item.documentation = 'JavaScript documentation';
-		}
-		return item;
+		return autoCompletion.getDetailedCompletionItem(item);
 	}
 );
+
+connection.onHover((params: HoverParams): Hover | null => {
+	if(!ast) return null;
+
+	for(var identifier of identifierTokens){  
+		if(params.position.line != identifier.range.start.line) continue;
+		if(params.position.line != identifier.range.end.line) continue;
+		if(params.position.character < identifier.range.start.character) continue;
+		if(params.position.character > identifier.range.end.character) continue;
+
+		var definitions: string[] = ast.functions.filter((f: any) => f.name == identifier.content).map((f: any) => f.definition);
+		return definitions.length == 0 ? null : {
+			contents: {kind: "plaintext", value: definitions.join("\n")},
+			range: identifier.range
+		};
+	};
+	
+	return null;
+});
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
