@@ -268,7 +268,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 					start: textDocument.positionAt(element.source.index),
 					end: textDocument.positionAt(Math.floor(element.source.index + element.source.stride))
 				},
-				message: element.message + Math.floor(element.source.index + element.source.stride),
+				message: element.message,
 				source: undefined
 			};
 			
