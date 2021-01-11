@@ -1233,10 +1233,10 @@ function updateGlobalBufferAndViews(buf) {
   Module['HEAPF64'] = HEAPF64 = new Float64Array(buf);
 }
 
-var STACK_BASE = 5273616,
+var STACK_BASE = 5274064,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 30736,
-    DYNAMIC_BASE = 5273616;
+    STACK_MAX = 31184,
+    DYNAMIC_BASE = 5274064;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1745,9 +1745,9 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  3061: function() {return process.platform == 'win32' ? 1 : 0},  
- 3118: function() {return process.platform == 'darwin' ? 1 : 0},  
- 3185: function() {return process.platform == 'linux' ? 1 : 0}
+  3280: function() {return process.platform == 'win32' ? 1 : 0},  
+ 3337: function() {return process.platform == 'darwin' ? 1 : 0},  
+ 3404: function() {return process.platform == 'linux' ? 1 : 0}
 };
 function node_fs_existsSync(filename){ var fs = require('fs'); return fs.existsSync(UTF8ToString(filename)) ? 1 : 0; }
 function node_fs_readFileSync(filename,will_append_newline){ var fs = require('fs'); try { contents = fs.readFileSync(UTF8ToString(filename), "utf8"); } catch(error){ return null; } bytes = lengthBytesUTF8(contents); ptr = _malloc(bytes + (will_append_newline ? 2 : 1)); stringToUTF8(contents, ptr, bytes + 1); return ptr; }
@@ -1845,6 +1845,10 @@ function node_path_resolve(filename){ var path = require('path'); var contents; 
       var js = jsStackTrace();
       if (Module['extraStackTrace']) js += '\n' + Module['extraStackTrace']();
       return demangleAll(js);
+    }
+
+  function ___assert_fail(condition, filename, line, func) {
+      abort('Assertion failed: ' + UTF8ToString(condition) + ', at: ' + [filename ? UTF8ToString(filename) : 'unknown filename', line, func ? UTF8ToString(func) : 'unknown function']);
     }
 
   
@@ -4898,7 +4902,7 @@ function intArrayToString(array) {
 
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
-var asmLibraryArg = { "__indirect_function_table": wasmTable, "__sys_access": ___sys_access, "__sys_fcntl64": ___sys_fcntl64, "__sys_ioctl": ___sys_ioctl, "__sys_open": ___sys_open, "emscripten_asm_const_int": _emscripten_asm_const_int, "emscripten_memcpy_big": _emscripten_memcpy_big, "emscripten_resize_heap": _emscripten_resize_heap, "fd_close": _fd_close, "fd_read": _fd_read, "fd_seek": _fd_seek, "fd_write": _fd_write, "memory": wasmMemory, "node_fs_existsSync": node_fs_existsSync, "node_fs_readFileSync": node_fs_readFileSync, "node_fs_readFileSync_binary_hex": node_fs_readFileSync_binary_hex, "node_path_resolve": node_path_resolve, "setTempRet0": _setTempRet0 };
+var asmLibraryArg = { "__assert_fail": ___assert_fail, "__indirect_function_table": wasmTable, "__sys_access": ___sys_access, "__sys_fcntl64": ___sys_fcntl64, "__sys_ioctl": ___sys_ioctl, "__sys_open": ___sys_open, "emscripten_asm_const_int": _emscripten_asm_const_int, "emscripten_memcpy_big": _emscripten_memcpy_big, "emscripten_resize_heap": _emscripten_resize_heap, "fd_close": _fd_close, "fd_read": _fd_read, "fd_seek": _fd_seek, "fd_write": _fd_write, "memory": wasmMemory, "node_fs_existsSync": node_fs_existsSync, "node_fs_readFileSync": node_fs_readFileSync, "node_fs_readFileSync_binary_hex": node_fs_readFileSync_binary_hex, "node_path_resolve": node_path_resolve, "setTempRet0": _setTempRet0 };
 var asm = createWasm();
 /** @type {function(...*):?} */
 var ___wasm_call_ctors = Module["___wasm_call_ctors"] = createExportWrapper("__wasm_call_ctors");
