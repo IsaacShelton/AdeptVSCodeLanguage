@@ -65,7 +65,6 @@ class AutoCompletions {
 	getDetailedCompletionItem(item: CompletionItem) {
 		// 'item.data' is used as index for completion item
 		Object.assign(item, this.completionItemDetails[item.data]);
-		connection.console.log(JSON.stringify(item));
 		return item;
 	}
 }
