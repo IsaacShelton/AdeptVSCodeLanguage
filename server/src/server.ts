@@ -275,11 +275,11 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		});
 	}
 
-	if(response.identifierTokens){
+	if(response && response.identifierTokens){
 		identifierTokens = response.identifierTokens;
 	}
 
-	if(response.ast){
+	if(response && response.ast){
 		ast = response.ast;
 		autoCompletion = constructAutoCompletions();
 	}
@@ -333,7 +333,7 @@ connection.onCompletionResolve(
 );
 
 connection.onHover((params: HoverParams): Hover | null => {
-	if(!ast) return null;
+	if(!ast || !identifierTokens) return null;
 
 	for(var identifier of identifierTokens){  
 		if(params.position.line != identifier.range.start.line) continue;
