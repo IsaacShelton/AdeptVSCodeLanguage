@@ -1233,10 +1233,10 @@ function updateGlobalBufferAndViews(buf) {
   Module['HEAPF64'] = HEAPF64 = new Float64Array(buf);
 }
 
-var STACK_BASE = 5274288,
+var STACK_BASE = 5274368,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 31408,
-    DYNAMIC_BASE = 5274288;
+    STACK_MAX = 31488,
+    DYNAMIC_BASE = 5274368;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1745,9 +1745,9 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  3615: function() {return process.platform == 'win32' ? 1 : 0},  
- 3672: function() {return process.platform == 'darwin' ? 1 : 0},  
- 3739: function() {return process.platform == 'linux' ? 1 : 0}
+  3695: function() {return process.platform == 'win32' ? 1 : 0},  
+ 3752: function() {return process.platform == 'darwin' ? 1 : 0},  
+ 3819: function() {return process.platform == 'linux' ? 1 : 0}
 };
 function node_fs_existsSync(filename){ var fs = require('fs'); return fs.existsSync(UTF8ToString(filename)) ? 1 : 0; }
 function node_fs_readFileSync(filename,will_append_newline){ var fs = require('fs'); try { contents = fs.readFileSync(UTF8ToString(filename), "utf8"); } catch(error){ return null; } bytes = lengthBytesUTF8(contents); ptr = _malloc(bytes + (will_append_newline ? 2 : 1)); stringToUTF8(contents, ptr, bytes + 1); return ptr; }

@@ -308,6 +308,11 @@ function constructAutoCompletions(): AutoCompletions {
 	var symbols: any[] = [];
 
 	if(ast) {
+		ast.composites.forEach((f: any) => {
+			f._completionItemKind = CompletionItemKind.Struct
+		});
+		symbols = symbols.concat(ast.composites);
+
 		ast.functions.forEach((f: any) => {
 			f._completionItemKind = CompletionItemKind.Function
 		});
