@@ -4,7 +4,7 @@
 	"description": "Adept Language Insight for VS Code",
 	"author": "DockySoft",
 	"license": "GPL-3.0-only",
-	"version": "1.10.1",
+	"version": "1.11.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/IsaacShelton/AdeptVSCodeLanguage"
