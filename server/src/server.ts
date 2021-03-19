@@ -313,6 +313,11 @@ function constructAutoCompletions(): AutoCompletions {
 		});
 		symbols = symbols.concat(ast.composites);
 
+		ast.enums.forEach((f: any) => {
+			f._completionItemKind = CompletionItemKind.Enum
+		});
+		symbols = symbols.concat(ast.enums);
+
 		ast.functions.forEach((f: any) => {
 			f._completionItemKind = CompletionItemKind.Function
 		});
