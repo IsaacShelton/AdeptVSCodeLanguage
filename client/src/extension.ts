@@ -4,7 +4,7 @@
  * ------------------------------------------------------------------------------------------ */
 
 import * as path from 'path';
-import { workspace, ExtensionContext } from 'vscode';
+import { workspace, ExtensionContext, window, ConfigurationTarget } from 'vscode';
 
 import {
 	LanguageClient,
@@ -12,6 +12,8 @@ import {
 	ServerOptions,
 	TransportKind
 } from 'vscode-languageclient';
+
+import * as child_process from 'child_process';
 
 let client: LanguageClient;
 
@@ -53,9 +55,31 @@ export function activate(context: ExtensionContext) {
 		serverOptions,
 		clientOptions
 	);
-	
+
+	client.onReady().then(() => {
+		client.onNotification("adeptLanguageInsight/noRoot", () => {
+			let yes: string = "Auto Configure (recommended)";
+
+			window
+				.showInformationMessage("No Adept Root Configured! Would you like to automatically configure it?", yes, "No")
+				.then(selection => {
+					if(selection != yes){
+						window.showInformationMessage("In order to manually configure, you must set 'adeptLanguageInsight.root' to be the root folder of your desired compiler. You can easily get the root folder of an Adept compiler by running `desired-compiler --root`");
+						return;
+					}
+
+					child_process.exec("adept --root", (err, stdout, stderr) => {
+						stdout = stdout.trim();
+						workspace.getConfiguration()
+							.update('adeptLanguageInsight.root', stdout, ConfigurationTarget.Global);
+						window.showInformationMessage("Automatically configuration successful!");
+					});
+				});
+		});
+	});
+
 	// Start the client. This will also launch the server
-	client.start();
+	context.subscriptions.push(client.start());
 }
 
 export function deactivate(): Thenable<void> | undefined {

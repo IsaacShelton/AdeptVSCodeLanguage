@@ -42,6 +42,12 @@
 					],
 					"default": "off",
 					"description": "Traces the communication between VS Code and the language server."
+				},
+				"adeptLanguageInsight.root": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"description": "The root folder that the desired compiler lives in"
 				}
 			}
 		}

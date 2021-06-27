@@ -161,12 +161,13 @@ connection.onInitialized(() => {
 // The example settings
 interface ExampleSettings {
 	maxNumberOfProblems: number;
+	root: string;
 }
 
 // The global settings, used when the `workspace/configuration` request is not supported by the client.
 // Please note that this is not the case when using this server with the client provided in this example
 // but could happen with other clients.
-const defaultSettings: ExampleSettings = { maxNumberOfProblems: 1000 };
+const defaultSettings: ExampleSettings = { maxNumberOfProblems: 1000, root: "" };
 let globalSettings: ExampleSettings = defaultSettings;
 
 // Cache the settings of all open documents
@@ -226,13 +227,18 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	} catch(err){
 		return;
 	}
-	
+
 	var response: null | string | any = invokeInsight({
 		"query": "ast",
-		"infrastructure": "/Users/isaac/Projects/Adept/bin/",
+		"infrastructure": settings.root,
 		"filename": filename,
 		"code": textDocument.getText()
 	});
+
+	if(settings.root == ""){
+		connection.sendNotification("adeptLanguageInsight/noRoot");
+		return;
+	}
 	
 	if(response == null){
 		let diagnostic: Diagnostic = {
