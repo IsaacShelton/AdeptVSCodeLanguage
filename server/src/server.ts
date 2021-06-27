@@ -76,6 +76,8 @@ insight_server.Module['onRuntimeInitialized'] = function() {
 	if (!insight_server.Module["noFSInit"] && !insight_server.FS.init.initialized) insight_server.FS.init();
 	insight_server.TTY.init();
 	insight_server.preMain();
+
+	documents.all().forEach(validateTextDocument);
 };
 
 function invokeInsight(query_json_string: string | object): null | string | object {
@@ -241,16 +243,8 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	}
 	
 	if(response == null){
-		let diagnostic: Diagnostic = {
-			severity: DiagnosticSeverity.Error,
-			range: {
-				start: textDocument.positionAt(0),
-				end: textDocument.positionAt(0)
-			},
-			message: "(null)"
-		};
-		
-		diagnostics.push(diagnostic);
+		// Do nothing if WASM module isn't operation yet
+		// We will make sure to do a pass once it becomes so
 	} else if(typeof response == "string"){
 		let diagnostic: Diagnostic = {
 			severity: DiagnosticSeverity.Error,
