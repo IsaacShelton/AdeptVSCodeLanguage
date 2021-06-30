@@ -1,22 +1,22 @@
 {
-	"name": "adept-language-insight-client",
-	"description": "Adept Language Insight VSCode Client",
-	"author": "DockySoft",
-	"license": "GPL-3.0-only",
-	"version": "0.0.1",
-	"publisher": "DockySoft",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/IsaacShelton/AdeptVSCodeLanguage"
-	},
-	"engines": {
-		"vscode": "^1.43.0"
-	},
-	"dependencies": {
-		"vscode-languageclient": "^6.1.3"
-	},
-	"devDependencies": {
-		"@types/vscode": "1.43.0",
-		"vscode-test": "^1.3.0"
-	}
+    "name": "adept-language-insight-client",
+    "description": "Adept Language Insight VSCode Client",
+    "author": "DockySoft",
+    "license": "GPL-3.0-only",
+    "version": "0.0.1",
+    "publisher": "DockySoft",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/IsaacShelton/AdeptVSCodeLanguage"
+    },
+    "engines": {
+        "vscode": "^1.43.0"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^6.1.3"
+    },
+    "devDependencies": {
+        "@types/vscode": "1.43.0",
+        "vscode-test": "^1.3.0"
+    }
 }

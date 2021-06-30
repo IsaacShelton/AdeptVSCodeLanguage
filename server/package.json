@@ -1,21 +1,21 @@
 {
-	"name": "adept-language-insight-server",
-	"description": "Implementation of Adept Language Server",
-	"version": "1.0.0",
-	"author": "DockySoft",
-	"license": "GPL-3.0-only",
-	"engines": {
-		"node": "*"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/IsaacShelton/AdeptVSCodeLanguage"
-	},
-	"dependencies": {
-		"file-uri-to-path": "^2.0.0",
-		"path": "^0.12.7",
-		"vscode-languageserver": "^6.1.1",
-		"vscode-languageserver-textdocument": "^1.0.1"
-	},
-	"scripts": {}
+    "name": "adept-language-insight-server",
+    "description": "Implementation of Adept Language Server",
+    "version": "1.0.0",
+    "author": "DockySoft",
+    "license": "GPL-3.0-only",
+    "engines": {
+        "node": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/IsaacShelton/AdeptVSCodeLanguage"
+    },
+    "dependencies": {
+        "file-uri-to-path": "^2.0.0",
+        "path": "^0.12.7",
+        "vscode-languageserver": "^6.1.1",
+        "vscode-languageserver-textdocument": "^1.0.1"
+    },
+    "scripts": {}
 }

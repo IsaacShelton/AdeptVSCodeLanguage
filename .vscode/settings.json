@@ -1,9 +1,16 @@
 {
-	"editor.insertSpaces": false,
-	"tslint.enable": true,
-	"typescript.tsc.autoDetect": "off",
-	"typescript.preferences.quoteStyle": "single",
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
-	}
+    "editor.insertSpaces": false,
+    "tslint.enable": true,
+    "typescript.tsc.autoDetect": "off",
+    "typescript.preferences.quoteStyle": "single",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "cSpell.words": [
+        "Struct",
+        "Unflushed",
+        "autofilled",
+        "cstring",
+        "malloc"
+    ]
 }
