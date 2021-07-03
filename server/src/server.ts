@@ -308,6 +308,22 @@ function constructAutoCompletions(): AutoCompletions {
     var symbols: any[] = [];
 
     if(ast) {
+        symbols.push({ name: "byte", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "ubyte", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "short", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "ushort", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "int", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "uint", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "long", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "ulong", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "usize", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "bool", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "successful", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "float", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "double", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "void", _completionItemKind: CompletionItemKind.Keyword });
+        symbols.push({ name: "ptr", _completionItemKind: CompletionItemKind.Keyword });
+        
         ast.composites.forEach((f: any) => {
             f._completionItemKind = CompletionItemKind.Struct
         });
