@@ -2,8 +2,6 @@
 import basics
 import captain
 
-erereor sr asdfasfdasdfs
-
 main :: func {
     names: <String> List = getNames()
     integer: int = 10
