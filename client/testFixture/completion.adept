@@ -5,7 +5,7 @@ import captain
 main :: func {
     names: <String> List = getNames()
     integer: int = 10
-    
+
     each name String in names {
         print(name)
     }
