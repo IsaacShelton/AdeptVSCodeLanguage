@@ -1,6 +1,7 @@
 
 import basics
 import captain
+import 'curl/curl.adept'
 
 main :: func {
     names: <String> List = getNames()

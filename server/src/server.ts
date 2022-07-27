@@ -338,6 +338,11 @@ function constructAutoCompletions(): AutoCompletions {
             f._completionItemKind = CompletionItemKind.Function
         });
         symbols = symbols.concat(ast.functions);
+
+        ast.constants.forEach((f: any) => {
+            f._completionItemKind = CompletionItemKind.Constant
+        });
+        symbols = symbols.concat(ast.constants);
     }
 
     symbols.forEach((symbol) => {

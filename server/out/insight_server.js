@@ -1745,11 +1745,11 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  3829: function() {return process.platform == 'win32' ? 1 : 0},  
- 3886: function() {return process.platform == 'darwin' ? 1 : 0},  
- 3944: function() {return process.arch == 'arm64' ? 1 : 0},  
- 3996: function() {return process.arch == 'x64' ? 1 : 0},  
- 4054: function() {return process.platform == 'linux' ? 1 : 0}
+  3844: function() {return process.platform == 'win32' ? 1 : 0},  
+ 3901: function() {return process.platform == 'darwin' ? 1 : 0},  
+ 3959: function() {return process.arch == 'arm64' ? 1 : 0},  
+ 4011: function() {return process.arch == 'x64' ? 1 : 0},  
+ 4069: function() {return process.platform == 'linux' ? 1 : 0}
 };
 function node_fs_existsSync(filename){ var fs = require('fs'); return fs.existsSync(UTF8ToString(filename)) ? 1 : 0; }
 function node_fs_readFileSync(filename,will_append_newline){ var fs = require('fs'); try { contents = fs.readFileSync(UTF8ToString(filename), "utf8"); } catch(error){ return null; } bytes = lengthBytesUTF8(contents); ptr = _malloc(bytes + (will_append_newline ? 2 : 1)); stringToUTF8(contents, ptr, bytes + 1); return ptr; }
