@@ -334,13 +334,23 @@ function constructAutoCompletions(): AutoCompletions {
         });
         symbols = symbols.concat(ast.enums);
 
+        ast.aliases.forEach((f: any) => {
+            f._completionItemKind = CompletionItemKind.Struct
+        });
+        symbols = symbols.concat(ast.aliases);
+
         ast.functions.forEach((f: any) => {
             f._completionItemKind = CompletionItemKind.Function
         });
         symbols = symbols.concat(ast.functions);
 
+        ast.function_aliases.forEach((f: any) => {
+            f._completionItemKind = CompletionItemKind.Function
+        });
+        symbols = symbols.concat(ast.function_aliases);
+
         ast.constants.forEach((f: any) => {
-            f._completionItemKind = CompletionItemKind.Constant
+            f._completionItemKind = CompletionItemKind.EnumMember
         });
         symbols = symbols.concat(ast.constants);
     }
