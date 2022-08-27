@@ -3,6 +3,22 @@ import basics
 import captain
 import 'curl/curl.adept'
 
+class Provider {
+    constructor {}
+
+    virtual func getString String {
+        return "Hello World"
+    }
+}
+
+class HiProvider extends Provider () {
+    constructor {}
+
+    override func getString String {
+        return "Hi World"
+    }
+}
+
 main :: func {
     names: <String> List = getNames()
     integer: int = 10
