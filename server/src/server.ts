@@ -17,7 +17,6 @@ import {
     InitializeResult,
     HoverParams,
     Hover,
-    MarkupContent
 } from 'vscode-languageserver';
 
 import {
@@ -39,7 +38,7 @@ class CompletionDetails {
     detail: string;
     documentation: string;
 
-    constructor(details: string, documentation: string){
+    constructor(details: string, documentation: string) {
         this.detail = details;
         this.documentation = documentation;
     }
@@ -49,7 +48,7 @@ class AutoCompletions {
     completionItems: CompletionItem[];
     completionItemDetails: CompletionDetails[];
 
-    constructor(){
+    constructor() {
         this.completionItems = [];
         this.completionItemDetails = [];
     }
@@ -71,7 +70,7 @@ class AutoCompletions {
 
 var autoCompletion: AutoCompletions = new AutoCompletions();
 
-insight_server.Module['onRuntimeInitialized'] = function() {
+insight_server.Module['onRuntimeInitialized'] = function () {
     is_wasm_initialized = true;
     if (!insight_server.Module["noFSInit"] && !insight_server.FS.init.initialized) insight_server.FS.init();
     insight_server.TTY.init();
@@ -81,12 +80,12 @@ insight_server.Module['onRuntimeInitialized'] = function() {
 };
 
 function invokeInsight(query_json_string: string | object): null | string | object {
-    if(!is_wasm_initialized) return null;
-    
-    if(typeof query_json_string != "string"){
+    if (!is_wasm_initialized) return null;
+
+    if (typeof query_json_string != "string") {
         query_json_string = JSON.stringify(query_json_string);
     }
-    
+
     var bytes = insight_server.lengthBytesUTF8(query_json_string);
     var cstring = insight_server._malloc(bytes + 1);
     insight_server.stringToUTF8(query_json_string, cstring, bytes + 1);
@@ -95,7 +94,7 @@ function invokeInsight(query_json_string: string | object): null | string | obje
     insight_server._free(cstring);
     insight_server._free(result_json_cstring);
     insight_server.checkUnflushedContent();
-    
+
     return JSON.parse(result_json);
 }
 
@@ -219,14 +218,14 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     // In this simple example we get the settings for every validate run.
     let settings = await getDocumentSettings(textDocument.uri);
     let diagnostics: Diagnostic[] = [];
-    
+
     var uri2path = require('file-uri-to-path');
     var path = require('path');
     var filename: string;
-    
+
     try {
         filename = path.resolve(uri2path(textDocument.uri));
-    } catch(err){
+    } catch (err) {
         return;
     }
 
@@ -237,15 +236,15 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
         "code": textDocument.getText()
     });
 
-    if(settings.root == ""){
+    if (settings.root == "") {
         connection.sendNotification("adeptLanguageInsight/noRoot");
         return;
     }
-    
-    if(response == null){
+
+    if (response == null) {
         // Do nothing if WASM module isn't operation yet
         // We will make sure to do a pass once it becomes so
-    } else if(typeof response == "string"){
+    } else if (typeof response == "string") {
         let diagnostic: Diagnostic = {
             severity: DiagnosticSeverity.Error,
             range: {
@@ -254,13 +253,13 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
             },
             message: response as string
         };
-        
+
         diagnostics.push(diagnostic);
-    } else if(Array.isArray(response.validation)){
+    } else if (Array.isArray(response.validation)) {
         (response.validation as any[]).forEach(element => {
             var is_self = element.source.object === filename;
-            if(!is_self) return;
-            
+            if (!is_self) return;
+
             let diagnostic: Diagnostic = {
                 severity: element.kind == "error" ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
                 range: {
@@ -270,16 +269,16 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
                 message: element.message,
                 source: undefined
             };
-            
+
             diagnostics.push(diagnostic);
         });
     }
 
-    if(response && response.identifierTokens){
+    if (response && response.identifierTokens) {
         identifierTokens = response.identifierTokens;
     }
 
-    if(response && response.ast){
+    if (response && response.ast) {
         ast = response.ast;
         autoCompletion = constructAutoCompletions();
     }
@@ -293,9 +292,63 @@ connection.onDidChangeWatchedFiles(_change => {
     connection.console.log('We received an file change event');
 });
 
+
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
-    (_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+    (textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+        let document = documents.get(textDocumentPosition.textDocument.uri);
+
+        function makeStandardLibraryComponentCompletionItem(name: string) {
+            return { label: name, kind: CompletionItemKind.Module, detail: "Standard library component" };
+        }
+
+        // Special auto-completion suggestions for `import`
+        if (document?.getText({
+            start: { line: textDocumentPosition.position.line, character: 0 },
+            end: textDocumentPosition.position
+        }).startsWith("import")) {
+            return [
+                "AABB",
+                "Anything",
+                "array_util",
+                "Array",
+                "audio",
+                "basics",
+                "captain",
+                "cerrno",
+                "cmath",
+                "csignal",
+                "cstdio",
+                "cstdlib",
+                "cstring",
+                "ctime",
+                "Grid",
+                "initializer_list_util",
+                "InitializerList",
+                "JSON",
+                "list_util",
+                "List",
+                "math",
+                "Matrix4f",
+                "mt19937",
+                "Optional",
+                "Ownership",
+                "Pair",
+                "parse",
+                "random",
+                "string_util",
+                "String",
+                "terminal",
+                "TypeInfo",
+                "Unique",
+                "VariadicArray",
+                "Vector2f",
+                "Vector2i",
+                "Vector3f",
+                "where",
+            ].map(makeStandardLibraryComponentCompletionItem);
+        }
+
         // The pass parameter contains the position of the text document in
         // which code complete got requested. For the example we ignore this
         // info and always provide the same completion items.
@@ -307,7 +360,7 @@ function constructAutoCompletions(): AutoCompletions {
     var completions: AutoCompletions = new AutoCompletions();
     var symbols: any[] = [];
 
-    if(ast) {
+    if (ast) {
         symbols.push({ name: "byte", _completionItemKind: CompletionItemKind.Keyword });
         symbols.push({ name: "ubyte", _completionItemKind: CompletionItemKind.Keyword });
         symbols.push({ name: "short", _completionItemKind: CompletionItemKind.Keyword });
@@ -323,7 +376,7 @@ function constructAutoCompletions(): AutoCompletions {
         symbols.push({ name: "double", _completionItemKind: CompletionItemKind.Keyword });
         symbols.push({ name: "void", _completionItemKind: CompletionItemKind.Keyword });
         symbols.push({ name: "ptr", _completionItemKind: CompletionItemKind.Keyword });
-        
+
         ast.composites.forEach((f: any) => {
             f._completionItemKind = CompletionItemKind.Struct
         });
@@ -356,9 +409,9 @@ function constructAutoCompletions(): AutoCompletions {
     }
 
     symbols.forEach((symbol) => {
-        var item: CompletionItem = {label: symbol.name, kind: symbol._completionItemKind};
+        var item: CompletionItem = { label: symbol.name, kind: symbol._completionItemKind };
         var details: CompletionDetails = new CompletionDetails(symbol.definition ? symbol.definition : "", symbol.documentation ? symbol.documentation : "");
-        
+
         completions.add(item, details);
     });
 
@@ -374,21 +427,21 @@ connection.onCompletionResolve(
 );
 
 connection.onHover((params: HoverParams): Hover | null => {
-    if(!ast || !identifierTokens) return null;
+    if (!ast || !identifierTokens) return null;
 
-    for(var identifier of identifierTokens){  
-        if(params.position.line != identifier.range.start.line) continue;
-        if(params.position.line != identifier.range.end.line) continue;
-        if(params.position.character < identifier.range.start.character) continue;
-        if(params.position.character > identifier.range.end.character) continue;
+    for (var identifier of identifierTokens) {
+        if (params.position.line != identifier.range.start.line) continue;
+        if (params.position.line != identifier.range.end.line) continue;
+        if (params.position.character < identifier.range.start.character) continue;
+        if (params.position.character > identifier.range.end.character) continue;
 
         var definitions: string[] = ast.functions.filter((f: any) => f.name == identifier.content).map((f: any) => f.definition);
         return definitions.length == 0 ? null : {
-            contents: {kind: "plaintext", value: definitions.join("\n")},
+            contents: { kind: "plaintext", value: definitions.join("\n") },
             range: identifier.range
         };
     };
-    
+
     return null;
 });
 

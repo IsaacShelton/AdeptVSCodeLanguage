@@ -12,5 +12,6 @@
         "autofilled",
         "cstring",
         "malloc"
-    ]
+    ],
+    "adeptLanguageServer.trace.server": "verbose"
 }

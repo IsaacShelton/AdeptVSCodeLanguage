@@ -50,8 +50,8 @@ export function activate(context: ExtensionContext) {
 
     // Create the language client and start the client.
     client = new LanguageClient(
-        'adeptLanguageServer-v2.5',
-        'Adept Language 2.5',
+        'adeptLanguageServer',
+        'Adept Language 2.7',
         serverOptions,
         clientOptions
     );
