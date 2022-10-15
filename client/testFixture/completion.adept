@@ -3,6 +3,9 @@ import basics
 import captain
 import 'curl/curl.adept'
 
+foreign makeJSInt(int) int
+func alias wasm\makeJSInt(int) => makeJSInt
+
 class Provider {
     constructor {}
 
