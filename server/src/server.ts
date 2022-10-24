@@ -1,7 +1,4 @@
-/* --------------------------------------------------------------------------------------------
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
+
 import {
     createConnection,
     TextDocuments,
@@ -402,10 +399,10 @@ function constructAutoCompletions(): AutoCompletions {
         });
         symbols = symbols.concat(ast.function_aliases);
 
-        ast.constants.forEach((f: any) => {
+        ast.namedExpressions.forEach((f: any) => {
             f._completionItemKind = CompletionItemKind.EnumMember
         });
-        symbols = symbols.concat(ast.constants);
+        symbols = symbols.concat(ast.namedExpressions);
     }
 
     symbols.forEach((symbol) => {
