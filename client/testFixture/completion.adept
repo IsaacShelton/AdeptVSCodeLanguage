@@ -2,6 +2,7 @@
 import basics
 import captain
 import 'curl/curl.adept'
+pragma windres "thing.rc"
 
 foreign makeJSInt(int) int
 func alias wasm\makeJSInt(int) => makeJSInt
