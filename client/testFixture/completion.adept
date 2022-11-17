@@ -23,7 +23,11 @@ class HiProvider extends Provider () {
     }
 }
 
+enum Color (RED, GREEN, BLUE)
+
 main :: func {
+    color Color = ::RED
+
     names: <String> List = getNames()
     integer: int = 10
 

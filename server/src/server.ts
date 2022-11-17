@@ -71,7 +71,6 @@ insight_server.Module['onRuntimeInitialized'] = function () {
     is_wasm_initialized = true;
     if (!insight_server.Module["noFSInit"] && !insight_server.FS.init.initialized) insight_server.FS.init();
     insight_server.TTY.init();
-    insight_server.preMain();
 
     documents.all().forEach(validateTextDocument);
 };

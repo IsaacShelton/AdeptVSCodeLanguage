@@ -1,2 +1,2 @@
 
-module.exports = {Module, FS, TTY, preMain, lengthBytesUTF8, stringToUTF8, UTF8ToString, _malloc, _free, checkUnflushedContent};
+module.exports = {Module, FS, TTY, lengthBytesUTF8, stringToUTF8, UTF8ToString, _malloc, _free, checkUnflushedContent};
