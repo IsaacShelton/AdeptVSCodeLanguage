@@ -91,7 +91,14 @@ function invokeInsight(query_json_string: string | object): null | string | obje
     insight_server._free(result_json_cstring);
     insight_server.checkUnflushedContent();
 
-    return JSON.parse(result_json);
+    try {
+        return JSON.parse(result_json);
+    } catch(e) {
+        if (e instanceof SyntaxError) {
+            e.message += e.message = "::: Invalid JSON: " + result_json;
+        }
+        throw e;
+    }
 }
 
 // Create a connection for the server, using Node's IPC as a transport.
