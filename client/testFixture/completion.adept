@@ -8,7 +8,7 @@ foreign makeJSInt(int) int
 func alias wasm\makeJSInt(int) => makeJSInt
 
 class Provider {
-    constructor {}
+    in constructor {}
 
     virtual func getString String {
         return "Hello World"
