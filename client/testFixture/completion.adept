@@ -11,6 +11,7 @@ class Provider {
     in constructor {}
 
     virtual func getString String {
+        assert true
         return "Hello World"
     }
 }
@@ -19,6 +20,7 @@ class HiProvider extends Provider () {
     constructor {}
 
     override func getString String {
+        assert true != false, "this is a message"
         return "Hi World"
     }
 }
