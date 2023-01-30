@@ -29,6 +29,9 @@ enum Color (RED, GREEN, BLUE)
 
 main :: func {
     color Color = ::RED
+    
+    anonymous_enum enum (APPLE, BANANA, ORANGE) = ::APPLE
+    value enum (A, B, C) = true ? (true ? ::A : ::B) : ::C
 
     names: <String> List = getNames()
     integer: int = 10
