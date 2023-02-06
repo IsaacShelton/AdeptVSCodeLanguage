@@ -27,6 +27,13 @@ class HiProvider extends Provider () {
 
 enum Color (RED, GREEN, BLUE)
 
+enum RelaxedEnum (
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+)
+
 main :: func {
     color Color = ::RED
     
