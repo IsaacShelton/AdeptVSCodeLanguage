@@ -1191,16 +1191,16 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  36376: () => { return process.platform == 'win32' ? 1 : 0 },  
- 36423: () => { return process.platform == 'darwin' ? 1 : 0 },  
- 36471: () => { return process.arch == 'arm64' ? 1 : 0 },  
- 36512: () => { return process.arch == 'x64' ? 1 : 0 },  
- 36551: () => { return process.platform == 'linux' ? 1 : 0 }
+  37048: () => { return process.platform == 'win32' ? 1 : 0 },  
+ 37095: () => { return process.platform == 'darwin' ? 1 : 0 },  
+ 37143: () => { return process.arch == 'arm64' ? 1 : 0 },  
+ 37184: () => { return process.arch == 'x64' ? 1 : 0 },  
+ 37223: () => { return process.platform == 'linux' ? 1 : 0 }
 };
-function node_path_resolve(filename) { var path = require('path'); var contents; try { contents = path.resolve(UTF8ToString(filename)); } catch(error){ return null; } bytes = lengthBytesUTF8(contents); ptr = _malloc(bytes + 1); stringToUTF8(contents, ptr, bytes + 1); return ptr; }
+function node_path_resolve(filename) { var path = require('path'); var contents; try { contents = path.resolve(UTF8ToString(filename)); } catch(error){ return null; } var bytes = lengthBytesUTF8(contents); var ptr = _malloc(bytes + 1); stringToUTF8(contents, ptr, bytes + 1); return ptr; }
 function node_fs_existsSync(filename) { var fs = require('fs'); return fs.existsSync(UTF8ToString(filename)) ? 1 : 0; }
-function node_fs_readFileSync(filename,will_append_newline) { var fs = require('fs'); try { contents = fs.readFileSync(UTF8ToString(filename), "utf8"); } catch(error){ return null; } bytes = lengthBytesUTF8(contents); ptr = _malloc(bytes + (will_append_newline ? 2 : 1)); stringToUTF8(contents, ptr, bytes + 1); return ptr; }
-function node_fs_readFileSync_binary_hex(filename) { var fs = require('fs'); try { contents = fs.readFileSync(UTF8ToString(filename)).toString('hex'); } catch(error){ return null; } bytes = lengthBytesUTF8(contents); ptr = _malloc(bytes + 1); stringToUTF8(contents, ptr, bytes + 1); return ptr; }
+function node_fs_readFileSync(filename,will_append_newline) { var fs = require('fs'); try { var contents = fs.readFileSync(UTF8ToString(filename), "utf8"); } catch(error){ return null; } var bytes = lengthBytesUTF8(contents); var ptr = _malloc(bytes + (will_append_newline ? 2 : 1)); stringToUTF8(contents, ptr, bytes + 1); return ptr; }
+function node_fs_readFileSync_binary_hex(filename) { var fs = require('fs'); var contents; try { contents = fs.readFileSync(UTF8ToString(filename)).toString('hex'); } catch(error){ return null; } var bytes = lengthBytesUTF8(contents); var ptr = _malloc(bytes + 1); stringToUTF8(contents, ptr, bytes + 1); return ptr; }
 
 
 
@@ -3855,137 +3855,6 @@ function node_fs_readFileSync_binary_hex(filename) { var fs = require('fs'); try
   }
   }
 
-  function setErrNo(value) {
-      HEAP32[((___errno_location())>>2)] = value;
-      return value;
-    }
-  function ___syscall_fcntl64(fd, cmd, varargs) {
-  SYSCALLS.varargs = varargs;
-  try {
-  
-      var stream = SYSCALLS.getStreamFromFD(fd);
-      switch (cmd) {
-        case 0: {
-          var arg = SYSCALLS.get();
-          if (arg < 0) {
-            return -28;
-          }
-          var newStream;
-          newStream = FS.createStream(stream, arg);
-          return newStream.fd;
-        }
-        case 1:
-        case 2:
-          return 0;  // FD_CLOEXEC makes no sense for a single process.
-        case 3:
-          return stream.flags;
-        case 4: {
-          var arg = SYSCALLS.get();
-          stream.flags |= arg;
-          return 0;
-        }
-        case 5:
-        /* case 5: Currently in musl F_GETLK64 has same value as F_GETLK, so omitted to avoid duplicate case blocks. If that changes, uncomment this */ {
-          
-          var arg = SYSCALLS.get();
-          var offset = 0;
-          // We're always unlocked.
-          HEAP16[(((arg)+(offset))>>1)] = 2;
-          return 0;
-        }
-        case 6:
-        case 7:
-        /* case 6: Currently in musl F_SETLK64 has same value as F_SETLK, so omitted to avoid duplicate case blocks. If that changes, uncomment this */
-        /* case 7: Currently in musl F_SETLKW64 has same value as F_SETLKW, so omitted to avoid duplicate case blocks. If that changes, uncomment this */
-          
-          
-          return 0; // Pretend that the locking is successful.
-        case 16:
-        case 8:
-          return -28; // These are for sockets. We don't have them fully implemented yet.
-        case 9:
-          // musl trusts getown return values, due to a bug where they must be, as they overlap with errors. just return -1 here, so fcntl() returns that, and we set errno ourselves.
-          setErrNo(28);
-          return -1;
-        default: {
-          return -28;
-        }
-      }
-    } catch (e) {
-    if (typeof FS == 'undefined' || !(e instanceof FS.ErrnoError)) throw e;
-    return -e.errno;
-  }
-  }
-
-  function ___syscall_ioctl(fd, op, varargs) {
-  SYSCALLS.varargs = varargs;
-  try {
-  
-      var stream = SYSCALLS.getStreamFromFD(fd);
-      switch (op) {
-        case 21509:
-        case 21505: {
-          if (!stream.tty) return -59;
-          return 0;
-        }
-        case 21510:
-        case 21511:
-        case 21512:
-        case 21506:
-        case 21507:
-        case 21508: {
-          if (!stream.tty) return -59;
-          return 0; // no-op, not actually adjusting terminal settings
-        }
-        case 21519: {
-          if (!stream.tty) return -59;
-          var argp = SYSCALLS.get();
-          HEAP32[((argp)>>2)] = 0;
-          return 0;
-        }
-        case 21520: {
-          if (!stream.tty) return -59;
-          return -28; // not supported
-        }
-        case 21531: {
-          var argp = SYSCALLS.get();
-          return FS.ioctl(stream, op, argp);
-        }
-        case 21523: {
-          // TODO: in theory we should write to the winsize struct that gets
-          // passed in, but for now musl doesn't read anything on it
-          if (!stream.tty) return -59;
-          return 0;
-        }
-        case 21524: {
-          // TODO: technically, this ioctl call should change the window size.
-          // but, since emscripten doesn't have any concept of a terminal window
-          // yet, we'll just silently throw it away as we do TIOCGWINSZ
-          if (!stream.tty) return -59;
-          return 0;
-        }
-        default: return -28; // not supported
-      }
-    } catch (e) {
-    if (typeof FS == 'undefined' || !(e instanceof FS.ErrnoError)) throw e;
-    return -e.errno;
-  }
-  }
-
-  function ___syscall_openat(dirfd, path, flags, varargs) {
-  SYSCALLS.varargs = varargs;
-  try {
-  
-      path = SYSCALLS.getStr(path);
-      path = SYSCALLS.calculateAt(dirfd, path);
-      var mode = varargs ? SYSCALLS.get() : 0;
-      return FS.open(path, flags, mode).fd;
-    } catch (e) {
-    if (typeof FS == 'undefined' || !(e instanceof FS.ErrnoError)) throw e;
-    return -e.errno;
-  }
-  }
-
   var readAsmConstArgsArray = [];
   function readAsmConstArgs(sigPtr, buf) {
       // Nobody should have mutated _readAsmConstArgsArray underneath us to be something else than an array.
@@ -4456,9 +4325,6 @@ function checkIncomingModuleAPI() {
 var asmLibraryArg = {
   "__assert_fail": ___assert_fail,
   "__syscall_faccessat": ___syscall_faccessat,
-  "__syscall_fcntl64": ___syscall_fcntl64,
-  "__syscall_ioctl": ___syscall_ioctl,
-  "__syscall_openat": ___syscall_openat,
   "emscripten_asm_const_int": _emscripten_asm_const_int,
   "emscripten_memcpy_big": _emscripten_memcpy_big,
   "emscripten_resize_heap": _emscripten_resize_heap,
@@ -4523,8 +4389,8 @@ var stackAlloc = Module["stackAlloc"] = createExportWrapper("stackAlloc");
 /** @type {function(...*):?} */
 var dynCall_jiji = Module["dynCall_jiji"] = createExportWrapper("dynCall_jiji");
 
-var ___start_em_js = Module['___start_em_js'] = 36598;
-var ___stop_em_js = Module['___stop_em_js'] = 37568;
+var ___start_em_js = Module['___start_em_js'] = 37270;
+var ___stop_em_js = Module['___stop_em_js'] = 38282;
 
 
 
@@ -4779,6 +4645,7 @@ unexportedRuntimeSymbols.forEach(unexportedRuntimeSymbol);
 var missingLibrarySymbols = [
   'ptrToString',
   'stringToNewUTF8',
+  'setErrNo',
   'inetPton4',
   'inetNtop4',
   'inetPton6',
