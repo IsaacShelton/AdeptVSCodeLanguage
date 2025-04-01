@@ -1191,11 +1191,11 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  37272: () => { return process.platform == 'win32' ? 1 : 0 },  
- 37319: () => { return process.platform == 'darwin' ? 1 : 0 },  
- 37367: () => { return process.arch == 'arm64' ? 1 : 0 },  
- 37408: () => { return process.arch == 'x64' ? 1 : 0 },  
- 37447: () => { return process.platform == 'linux' ? 1 : 0 }
+  37432: () => { return process.platform == 'win32' ? 1 : 0 },  
+ 37479: () => { return process.platform == 'darwin' ? 1 : 0 },  
+ 37527: () => { return process.arch == 'arm64' ? 1 : 0 },  
+ 37568: () => { return process.arch == 'x64' ? 1 : 0 },  
+ 37607: () => { return process.platform == 'linux' ? 1 : 0 }
 };
 function node_path_resolve(filename) { var path = require('path'); var contents; try { contents = path.resolve(UTF8ToString(filename)); } catch(error){ return null; } var bytes = lengthBytesUTF8(contents); var ptr = _malloc(bytes + 1); stringToUTF8(contents, ptr, bytes + 1); return ptr; }
 function node_fs_existsSync(filename) { var fs = require('fs'); return fs.existsSync(UTF8ToString(filename)) ? 1 : 0; }
@@ -4389,8 +4389,8 @@ var stackAlloc = Module["stackAlloc"] = createExportWrapper("stackAlloc");
 /** @type {function(...*):?} */
 var dynCall_jiji = Module["dynCall_jiji"] = createExportWrapper("dynCall_jiji");
 
-var ___start_em_js = Module['___start_em_js'] = 37494;
-var ___stop_em_js = Module['___stop_em_js'] = 38506;
+var ___start_em_js = Module['___start_em_js'] = 37654;
+var ___stop_em_js = Module['___stop_em_js'] = 38666;
 
 
 
